@@ -15,7 +15,7 @@ module.exports = (sequelize) => {
     },
     image: {
       type: DataTypes.STRING,
-      allowNull: false,
+      // allowNull: false,
     },
     life: {
       type: DataTypes.INTEGER,
@@ -34,7 +34,7 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     height: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       allowNull: false,
     },
     weight: {
