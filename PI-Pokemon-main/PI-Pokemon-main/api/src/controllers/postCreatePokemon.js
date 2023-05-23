@@ -4,14 +4,14 @@ const { v4: uuidv4 } = require('uuid');
 
 
 const postCreatePokemon = async (req, res) => {   
-    const { name, life, attack, defense, speed, height, weight, image, type } = req.body;
-
+    const { name, hp, attack, defense, speed, height, weight, image, type } = req.body;
+    name = name.toLowerCase();
     const id = uuidv4();
         
     try {
         const newPokemon = await Pokemon.create({
             name,
-            life,
+            hp,
             attack,
             defense,
             speed,
