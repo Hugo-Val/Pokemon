@@ -14,8 +14,9 @@ async function getAllPokemons(req, res) {
         const apiData3 = await Promise.all(apiData2);
         const apiData4 = apiData3.map((e) => {
             const { data } = e;
-            const { name, types, sprites } = data;
+            const { id, name, types, sprites } = data;
             return {
+                id,
                 name,
                 types : types.map((e) => e.type.name),
                 image: sprites.other['official-artwork'].front_default,
@@ -24,8 +25,9 @@ async function getAllPokemons(req, res) {
         );
         const db = await Pokemon.findAll();
         const dbData = db.map((e) => {
-            const { name,  types, sprites } = e;
+            const { id, name,  types, sprites } = e;
             return {
+                id,
                 name,
                 types,
                 image: sprites,
