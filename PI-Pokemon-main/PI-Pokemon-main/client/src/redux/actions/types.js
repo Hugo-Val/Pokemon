@@ -1,0 +1,13 @@
+export const GET_POKEMONS = 'GET_POKEMONS';
+export const GET_POKEMON_DETAIL = 'GET_POKEMON_DETAIL';
+export const GET_POKEMON_TYPES = 'GET_POKEMON_TYPES';
+export const POST_POKEMON_CREATED = 'POST_POKEMON_CREATED';
+export const GET_POKEMON_BY_NAME = 'GET_POKEMON_BY_NAME';
+export const FILTER = 'FILTER';
+export const ORDER = 'ORDER';
+export const RESET = 'RESET';
+export const NEXT_PAGE = 'NEXT_PAGE';
+export const PREV_PAGE = 'PREV_PAGE';
+export const HANDLE_NUMBER = 'HANDLE_NUMBER';
+export const ADD_LOCATION = 'ADD_LOCATION';
+export const SEARCH_BY_NAME = 'SEARCH_BY_NAME';
