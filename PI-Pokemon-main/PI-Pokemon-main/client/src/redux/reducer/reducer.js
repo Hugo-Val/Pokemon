@@ -33,6 +33,11 @@ const rootReducer = (state = initialState, { type, payload }) => {
                         ...state,
                         pokemonDetail: payload
                     }
+                case types.GET_POKEMON_TYPES:
+                    return {
+                        ...state,
+                        pokemonTypes: payload
+                    }
         default:
             return state;
     }
