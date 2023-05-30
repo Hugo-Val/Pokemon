@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { createPokemon, getPokemonTypes } from '../../redux/actions/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { postPokemonCreated, getPokemonTypes } from '../../redux/actions/actions';
 import Validate from './Validate';
 import foxxy from '../../images/newPokemons/foxxy.jpg';
+import lionly from '../../images/newPokemons/lionly.jpg';
+import piggy from '../../images/newPokemons/piggy.jpg';
+import porcupine from '../../images/newPokemons/porcupine.jpg';
+import rabbit from '../../images/newPokemons/rabbit.jpg';
+import skunky from '../../images/newPokemons/skunky.jpg';
+import squirrel from '../../images/newPokemons/squirrel.jpg';
 import styles from './CreatePokemon.module.css';
 
 export default function CreatePokemon() {
     const dispatch = useDispatch();
 
-    // useEffect(() => {
-    //     dispatch(getPokemonTypes());
-    // }, [dispatch]);
+    useEffect(() => {
+        dispatch(getPokemonTypes());
+    }, [dispatch]);
+
+    const types  = useSelector(state => state.pokemonTypes);
+    
 
 
 
@@ -28,15 +37,29 @@ export default function CreatePokemon() {
 
     const [ errors, setErrors ] = useState({
         name: 'Name is required',
-        image: '',
-        hp : '',    
-        attack: '',
-        defense: '',
-        speed: '',
-        height: '',
-        weight: '',
-        types: ''
+        image: 'Image is required',
+        hp : 'Hp is required',    
+        attack: 'Attack is required',
+        defense: 'Defense is required',
+        speed: 'Speed is required',
+        height: 'Height is required',
+        weight: 'Weight is required',
+        types: 'At least one type is required'
     });
+    
+    const handleCheckboxChange = (e) => {
+        if(e.target.checked) {
+            setPokemonData({
+                ...pokemonData,
+                types: [...pokemonData.types, e.target.value]
+            });
+        } else {
+            setPokemonData({
+                ...pokemonData,
+                types: pokemonData.types.filter(type => type !== e.target.value)
+            });
+        }
+    };
 
     const handleInputChange = (e) => {
         setPokemonData({
@@ -48,10 +71,27 @@ export default function CreatePokemon() {
             [e.target.name]: e.target.value
         }));
     };
+
+    const handleSumit = (e) => {
+        e.preventDefault();
+        dispatch(postPokemonCreated(pokemonData));
+        alert('Pokemon created successfully!');
+        setPokemonData({
+            name: '',
+            image: '',
+            hp : '',
+            attack: '',
+            defense: '',
+            speed: '',
+            height: '',
+            weight: '',
+            types: []
+        });
+    };
     return (
         <div>
             <h1>Create your own Pokemon!</h1>
-            <form className={styles.form}>
+            <form className={styles.form} onSubmit={handleSumit}>
                 <div className={styles.formGroup}>
                     <label htmlFor="name">Name: </label>
                     <input 
@@ -64,9 +104,18 @@ export default function CreatePokemon() {
                     <p className={styles.error}>{errors.name}</p>
                     <select name="image" onClick={handleInputChange}>
                         <option value={foxxy}>foxxy</option>
+                        <option value={lionly}>lionly</option>
+                        <option value={piggy}>piggy</option>
+                        <option value={porcupine}>porcupine</option>
+                        <option value={rabbit}>rabbit</option>
+                        <option value={skunky}>skunky</option>
+                        <option value={squirrel}>squirrel</option>
                     </select>
-                    <img src={pokemonData.image} alt="foxxy" />
-                    {/* <p className={styles.error}>{errors.image}</p> */}
+                    <div>
+                        <img className={styles.img} src={pokemonData.image} alt={pokemonData.name} />
+                    </div>
+                    
+                    <p className={styles.error}>{errors.image}</p>
                     <label htmlFor="hp">HP: </label>
                     <input
                         type="number"
@@ -75,7 +124,7 @@ export default function CreatePokemon() {
                         placeholder='Enter the HP of the Pokemon'
                         onChange={handleInputChange}
                     />
-                    {/* <p className={styles.error}>{errors.hp}</p> */}
+                    <p className={styles.error}>{errors.hp}</p>
                     <label htmlFor="attack">Attack: </label>
                     <input
                         type="number"
@@ -84,7 +133,7 @@ export default function CreatePokemon() {
                         placeholder='Enter the attack of the Pokemon'
                         onChange={handleInputChange}
                     />
-                    {/* <p className={styles.error}>{errors.attack}</p> */}
+                    <p className={styles.error}>{errors.attack}</p>
                     <label htmlFor="defense">Defense: </label>
                     <input
                         type="number"
@@ -93,7 +142,7 @@ export default function CreatePokemon() {
                         placeholder='Enter the defense of the Pokemon'
                         onChange={handleInputChange}
                     />
-                    {/* <p className={styles.error}>{errors.defense}</p> */}
+                    <p className={styles.error}>{errors.defense}</p>
                     <label htmlFor="speed">Speed: </label>
                     <input
                         type="number"
@@ -102,7 +151,7 @@ export default function CreatePokemon() {
                         placeholder='Enter the speed of the Pokemon'
                         onChange={handleInputChange}
                     />
-                    {/* <p className={styles.error}>{errors.speed}</p> */}
+                    <p className={styles.error}>{errors.speed}</p>
                     <label htmlFor="height">Height: </label>
                     <input
                         type="number"
@@ -111,7 +160,7 @@ export default function CreatePokemon() {
                         placeholder='Enter the height of the Pokemon'
                         onChange={handleInputChange}
                     />
-                    {/* <p className={styles.error}>{errors.height}</p> */}
+                    <p className={styles.error}>{errors.height}</p>
                     <label htmlFor="weight">Weight: </label>
                     <input
                         type="number"
@@ -120,18 +169,36 @@ export default function CreatePokemon() {
                         placeholder='Enter the weight of the Pokemon'
                         onChange={handleInputChange}
                     />
-                    {/* <p className={styles.error}>{errors.weight}</p> */}
+                    <p className={styles.error}>{errors.weight}</p>
                     <label htmlFor="types">Types: </label>
-                    <input
-                        type="checkbox"
-                        name="normal"
-                        value="normal"
-                    />
-                    <label htmlFor="normal">Types: </label>
+                    <div className={styles.types}> 
+                        {types.map((type, index) => (
+                            <div  key={index}>
+                                <input
+                                    type="checkbox"
+                                    name={type.name}
+                                    value={type.name}
+                                    onChange={handleCheckboxChange}    
+                                />
+                                <label htmlFor={type.name}>{type.name}</label>
+                            </div>
+                        ))}
+
+
+                    </div>
                     
                     
-                    {/* <p className={styles.error}>{errors.types}</p> */}
-                    <button type="submit">Create Pokemon</button>
+                    
+                    <p className={styles.error}>{errors.types}</p>
+
+                    {
+                        Object.keys(errors).length === 0 ? (
+                            <button type="submit">Create a Pokemon</button>
+                                
+                        ) : null
+
+                    } 
+
 
 
 
@@ -143,3 +210,4 @@ export default function CreatePokemon() {
         </div>
     )
 }
+
