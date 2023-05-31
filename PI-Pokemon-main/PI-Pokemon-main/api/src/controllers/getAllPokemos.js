@@ -23,19 +23,28 @@ async function getAllPokemons(req, res) {
             };
         }
         );
-        const db = await Pokemon.findAll();
+        const db = await Pokemon.findAll(
+            { include: {
+                 all: true
+                }}
+        );
         const dbData = db.map((e) => {
-            const { id, name,  types, sprites } = e;
+            const { id, name, image} = e;
+            const type = e.types.map((e) => e.name);
+
             return {
                 id,
                 name,
-                types,
-                image: sprites,
+                image,
+                type
             };
         }
         );
+            
+
+
         const totalData = apiData4.concat(dbData);
-        res.status(200).json(totalData);  
+        res.status(200).json({totalData});  
     } catch (error) {
         res.status(404).send('No se encontraron pokemons');
     }
