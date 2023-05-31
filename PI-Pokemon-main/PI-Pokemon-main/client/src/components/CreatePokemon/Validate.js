@@ -39,7 +39,7 @@ export default function Validate(pokemonData) {
     } else if (!/^[0-9]+$/.test(pokemonData.weight)) {
         errors.weight = 'Weight must be an integer';
     }
-    if (!pokemonData.types || pokemonData.types.length === 0) {
+    if (!pokemonData.type || pokemonData.type.length === 0) {
         errors.types = 'At least one type is required';
     }
     return errors;

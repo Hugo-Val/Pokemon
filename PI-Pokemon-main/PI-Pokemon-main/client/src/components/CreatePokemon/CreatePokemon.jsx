@@ -20,9 +20,8 @@ export default function CreatePokemon() {
 
     const types  = useSelector(state => state.pokemonTypes);
     
-
-
-
+    
+    
     const [ pokemonData, setPokemonData ] = useState({
         name: '',
         image: '',
@@ -32,9 +31,9 @@ export default function CreatePokemon() {
         speed: '',
         height: '',
         weight: '',
-        types: []
+        type: []
     });
-
+    
     const [ errors, setErrors ] = useState({
         name: 'Name is required',
         image: 'Image is required',
@@ -44,50 +43,94 @@ export default function CreatePokemon() {
         speed: 'Speed is required',
         height: 'Height is required',
         weight: 'Weight is required',
-        types: 'At least one type is required'
+        type: 'you must select at least one type'
     });
+    console.log(pokemonData);
+    
     
     const handleCheckboxChange = (e) => {
         if(e.target.checked) {
+            
             setPokemonData({
                 ...pokemonData,
-                types: [...pokemonData.types, e.target.value]
+                type: [...pokemonData.type, {name: e.target.value}]
             });
+            
+            setErrors(Validate({
+                ...pokemonData,
+                [e.target.name]: e.target.value
+            }));
         } else {
+            
             setPokemonData({
                 ...pokemonData,
-                types: pokemonData.types.filter(type => type !== e.target.value)
-            });
+                type: pokemonData.type.filter(type => type !== e.target.value)
+            })
+            setErrors(Validate({
+                ...pokemonData,
+                [e.target.name]: e.target.value
+            }));
         }
+       
     };
-
     const handleInputChange = (e) => {
+        console.log(e.target.value);
+        if(e.target.name === 'image' || e.target.name === 'name') {
+            setPokemonData({
+                ...pokemonData,
+                [e.target.name]: e.target.value
+            });
+            setErrors(Validate({
+                ...pokemonData,
+                [e.target.name]: e.target.value
+            }));
+            return;
+        }
+        if (e.target.name === 'height' ) {
+            setPokemonData({
+                ...pokemonData,
+                [e.target.name]: parseFloat(e.target.value)
+            });
+            setErrors(Validate({
+                ...pokemonData,
+                [e.target.name]: e.target.value
+            }));
+            return;
+        }
         setPokemonData({
             ...pokemonData,
-            [e.target.name]: e.target.value
+            [e.target.name]:parseInt(e.target.value) 
         });
         setErrors(Validate({
             ...pokemonData,
             [e.target.name]: e.target.value
         }));
     };
-
+    
     const handleSumit = (e) => {
-        e.preventDefault();
-        dispatch(postPokemonCreated(pokemonData));
-        alert('Pokemon created successfully!');
-        setPokemonData({
-            name: '',
-            image: '',
-            hp : '',
-            attack: '',
-            defense: '',
-            speed: '',
-            height: '',
-            weight: '',
-            types: []
-        });
+        try {
+            e.preventDefault();
+            dispatch(postPokemonCreated(pokemonData));
+            alert('Pokemon created successfully!');
+            setPokemonData({
+                name: '',
+                image: '',
+                hp : '',
+                attack: '',
+                defense: '',
+                speed: '',
+                height: '',
+                weight: '',
+                type: []
+            });
+        } catch (error) {
+            alert(error);   
+        }
+        
     };
+
+    
+
     return (
         <div>
             <h1>Create your own Pokemon!</h1>
@@ -118,7 +161,7 @@ export default function CreatePokemon() {
                     <p className={styles.error}>{errors.image}</p>
                     <label htmlFor="hp">HP: </label>
                     <input
-                        type="number"
+                        type="number" 
                         name="hp"
                         value={pokemonData.hp}
                         placeholder='Enter the HP of the Pokemon'
@@ -178,7 +221,8 @@ export default function CreatePokemon() {
                                     type="checkbox"
                                     name={type.name}
                                     value={type.name}
-                                    onChange={handleCheckboxChange}    
+                                    onInput={handleCheckboxChange} 
+                                       
                                 />
                                 <label htmlFor={type.name}>{type.name}</label>
                             </div>
