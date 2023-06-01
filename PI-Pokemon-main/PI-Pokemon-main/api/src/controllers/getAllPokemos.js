@@ -44,7 +44,7 @@ async function getAllPokemons(req, res) {
 
 
         const totalData = apiData4.concat(dbData);
-        res.status(200).json({totalData});  
+        res.status(200).json(totalData);  
     } catch (error) {
         res.status(404).send('No se encontraron pokemons');
     }
