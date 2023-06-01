@@ -51,7 +51,7 @@ export const postPokemonCreated = (pokemon) => {
 export const getPokemonByName = (name) => {
     return async (dispatch) => {
         try {
-            const response = await axios.get(`http://localhost:3001/pokemons?name=${name}`);
+            const response = await axios.get(`http://localhost:3001/pokemon/name?name=${name}`);
             dispatch({ type: types.GET_POKEMON_BY_NAME, payload: response.data });
         } catch (error) {
             console.log(error);
@@ -83,9 +83,11 @@ export const handleNumber = (number) => {
     return { type: types.HANDLE_NUMBER, payload: number };
 }
 
-export const addLocation = (location) => {
-
-    return { type: types.ADD_LOCATION, payload: location };
+export const addLocation = (path) => {
+    return { 
+        type: types.ADD_LOCATION,
+        payload: path
+    };
 }
 
 export const searchByName = (name) => {

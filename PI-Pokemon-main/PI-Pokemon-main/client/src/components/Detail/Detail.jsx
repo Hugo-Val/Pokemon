@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getPokemonDetail } from "../../redux/actions/actions";
 import { useParams } from "react-router-dom/cjs/react-router-dom.min";

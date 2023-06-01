@@ -45,7 +45,7 @@ export default function CreatePokemon() {
         weight: 'Weight is required',
         type: 'you must select at least one type'
     });
-    console.log(pokemonData);
+    
     
     
     const handleCheckboxChange = (e) => {

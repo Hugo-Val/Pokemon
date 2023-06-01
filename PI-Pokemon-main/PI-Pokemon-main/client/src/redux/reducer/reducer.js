@@ -5,14 +5,30 @@ const initialState = {
     pokemonDetail: {},
     pokemonCreated: {},
     pokemonTypes: [],
-    pokemonSearch: [],
+    pokemonSearch: {},
     Filter: [],
     Order: [],
     currentPage: 1,
+    location: []
 }
 
 const rootReducer = (state = initialState, { type, payload }) => {
     switch (type) {
+        case types.RESET:
+            return {
+                ...state,
+                pokemonSearch: {},
+            }
+        case types.GET_POKEMON_BY_NAME:
+            return {
+                ...state,
+                pokemonSearch: payload
+            }
+        case types.ADD_LOCATION:
+            return {
+                ...state,
+                location: [...state.location, payload]
+            }
         case types.GET_POKEMONS:
             return {
                 ...state,
@@ -23,21 +39,21 @@ const rootReducer = (state = initialState, { type, payload }) => {
                 ...state,
                 currentPage: state.currentPage + 1
             }
-            case types.PREV_PAGE:
-                return {
-                    ...state,
-                    currentPage: state.currentPage - 1
-                }
-                case types.GET_POKEMON_DETAIL:
-                    return {
-                        ...state,
-                        pokemonDetail: payload
-                    }
-                case types.GET_POKEMON_TYPES:
-                    return {
-                        ...state,
-                        pokemonTypes: payload
-                    }
+        case types.PREV_PAGE:
+            return {
+                ...state,
+                currentPage: state.currentPage - 1
+            }
+        case types.GET_POKEMON_DETAIL:
+            return {
+                ...state,
+                pokemonDetail: payload
+            }
+        case types.GET_POKEMON_TYPES:
+            return {
+                ...state,
+                pokemonTypes: payload
+            }
         default:
             return state;
     }

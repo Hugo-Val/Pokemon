@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import styles from './Card.module.css';
 
 export default function Card( props) {
-    console.log(props);
+    
     const { id, name, image, types } = props;
     return (
         <div className={styles.card}>
