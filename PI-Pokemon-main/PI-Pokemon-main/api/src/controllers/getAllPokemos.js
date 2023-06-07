@@ -5,7 +5,7 @@ const { API_URL } = process.env;
 
 async function getAllPokemons(req, res) {
     try {
-        const api = await axios.get(API_URL); // ?offset=0&limit=1281
+        const api = await axios.get(API_URL+"?offset=0&limit=60"); // ?offset=0&limit=60
         const apiData = api.data.results;
         const apiData2 = apiData.map((e) => {
             const { url } = e;
@@ -14,12 +14,13 @@ async function getAllPokemons(req, res) {
         const apiData3 = await Promise.all(apiData2);
         const apiData4 = apiData3.map((e) => {
             const { data } = e;
-            const { id, name, types, sprites } = data;
+            const { id, name, types, sprites, attack } = data;
             return {
                 id,
                 name,
                 types : types.map((e) => e.type.name),
                 image: sprites.other['official-artwork'].front_default,
+                attack:data.stats[1].base_stat
             };
         }
         );
@@ -29,14 +30,15 @@ async function getAllPokemons(req, res) {
                 }}
         );
         const dbData = db.map((e) => {
-            const { id, name, image} = e;
+            const { id, name, image, attack} = e;
             const type = e.types.map((e) => e.name);
 
             return {
                 id,
                 name,
                 image,
-                type
+                type,
+                attack
             };
         }
         );
