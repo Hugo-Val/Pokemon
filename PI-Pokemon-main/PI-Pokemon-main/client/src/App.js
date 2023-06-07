@@ -19,7 +19,10 @@ function App() {
   }, [location, dispatch]);
 
   function onSearch(name) {
-    dispatch(getPokemonByName(name));
+    if (name !== '') {
+      return dispatch(getPokemonByName(name));
+    }
+    
   }
 
   return (

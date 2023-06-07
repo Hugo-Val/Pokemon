@@ -1,19 +1,18 @@
 import * as types from '../actions/types';
 import axios from 'axios';
 
-export const getPokemons = () => {
-    return async (dispatch) => {
-        try {
+export const getPokemons = () => async (dispatch) => {
+    try {
             const response = await axios.get('http://localhost:3001/pokemons');
             dispatch({ 
                 type: types.GET_POKEMONS,
                 payload: response.data
             });
-        } catch (error) {
-            console.log(error);
-        }
-    };
-}
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 
 export const getPokemonDetail = (id) => {
     return async (dispatch) => {
@@ -64,7 +63,10 @@ export const filter = (type) => {
 }
 
 export const order = (order) => {
-    return { type: types.ORDER, payload: order };
+    return {
+        type: types.ORDER,
+        payload: order
+    };
 }
 
 export const reset = () => {
@@ -90,6 +92,5 @@ export const addLocation = (path) => {
     };
 }
 
-export const searchByName = (name) => {
-    return { type: types.SEARCH_BY_NAME, payload: name };
-}
+
+

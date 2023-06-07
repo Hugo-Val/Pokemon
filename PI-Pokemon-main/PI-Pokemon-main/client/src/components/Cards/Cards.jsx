@@ -2,67 +2,75 @@ import styles from './Cards.module.css';
 import Card from '../Card/Card';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { getPokemons, order, filter } from '../../redux/actions/actions';
+import { getPokemons, order, filter, getPokemonTypes, reset } from '../../redux/actions/actions';
 import Paginate from '../Paginate/Paginate';
 
 export default function Cards() {
+
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getPokemons());  
+        dispatch(getPokemonTypes());
+    }
+    , []);
     const pokemons = useSelector(state => state.pokemons);
     const currentPage = useSelector(state => state.currentPage);
-    const pokemonSearch = useSelector(state => state.pokemonSearch);
-    
-    
-    
-    useEffect(() => {
-        dispatch(getPokemons());      
-    }
-    , [dispatch]);
-    
-    
-
-    
-    
+    const types = useSelector(state => state.pokemonTypes);
 
     let desde = (currentPage - 1) *  12;
-    let hasta = desde + 12;
+    let hasta = currentPage * 12;
     let pokemosPage = Math.ceil(pokemons.length / 12);
-    let pokemonsToShow = pokemons.slice(desde, hasta);
-    if (Object.keys(pokemonSearch).length > 0) {
-        pokemosPage = 1;
-        desde = 0;
-        hasta = 1;
-        pokemonsToShow = [pokemonSearch].slice(desde, hasta);
-    }
+    let pokemonsToShow = pokemons?.slice(desde, hasta);
 
+    
     const handleOrder = (e) => {
-        dispatch(order(e.target.value));
+        e.preventDefault();
+        return dispatch(order(e.target.value)); 
+        
     }
 
     const handleFilter = (e) => {
-        dispatch(filter(e.target.value));
+        e.preventDefault();
+       return dispatch(filter(e.target.value));
+       
+    }
+    
+    const handleReset = (e) => {
+        e.preventDefault();
+        return dispatch(reset());
     }
         
     return (
         <div>
             <div className={styles.header}>
+                
+                <select onClick={handleOrder} >
+                    <option value="order" disabled  >Select Order</option>
+                    <option value="asc">A-Z</option>
+                    <option value="desc">Z-A</option>
+                    <option value="attack">Attack</option>
+                </select>
+                
                 <h1>Henry Pokemons</h1>
-                <div className={styles.filters}>
-                    <select onChange={handleOrder}>
-                        <option value="default">Order by</option>
-                        <option value="asc">A-Z</option>
-                        <option value="desc">Z-A</option>
-                        <option value="attack">Attack</option>
-                    </select>
-                    <select onChange={handleFilter}>
-                        <option value="default">Filter by</option>
-                        <option value="created">Created</option>
-                        <option value="api">Api</option>
-                    </select>
+                <div>
+                <select onClick={handleFilter}>
+                    <option value="filter" disabled>Filter by</option>
+                    <option value="created">Created</option>
+                    <option value="api">Api</option>
+                    { types?.map((type, index) => {
+                        return (
+                            <option key={index} value={type.name}>{type.name}</option>
+                        )
+                      })
+                    }
+                </select>
+                <button onClick={handleReset}>Reset</button>
                 </div>
             </div>
             <Paginate qtyPages={pokemosPage}/>
             <div className={styles.pokemons}>
-                {pokemonsToShow?.map((pokemon, index) => {
+                { pokemonsToShow.map((pokemon, index) => {
                     return (
                         <Card
                             key={index}
@@ -74,8 +82,6 @@ export default function Cards() {
                     )
                 })}
             </div>
-
-
         </div>
     )
 }
